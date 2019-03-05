@@ -2,7 +2,7 @@
 
 ## API Design
 | HTTP Method | URL | Action |
-| ------------- | ------------- |
+| ------------- | ------------- | ------------- |
 | GET | http://[hostname]/api/v1/users/ | Retrieve list of users |
 | GET | http://[hostname]/api/v1/users/[user_id] | Retrieve a user |
 | GET | http://[hostname]/api/v1/workouts/[workout_id] | Retrieve a workout |
