@@ -57,5 +57,33 @@ def create_user():
     tests.append(test)
     return jsonify({'test': test}), 201
 
+#Define UPDATE USER
+@app.route('/api/v1/users/<int:test_id>', methods=['PUT'])
+def update_test(test_id):
+    test = [test for test in tests if test['id'] == test_id]
+    if len(test) == 0:
+        abort(404)
+    if not request.json:
+        abort(400)
+    if 'title' in request.json and type(request.json['title']) != unicode:
+        abort(400)
+    if 'description' in request.json and type(request.json['description']) is not unicode:
+        abort(400)
+    if 'done' in request.json and type(request.json['done']) is not bool:
+        abort(400)
+    test[0]['title'] = request.json.get('title', test[0]['title'])
+    test[0]['description'] = request.json.get('description', test[0]['description'])
+    test[0]['done'] = request.json.get('done', test[0]['done'])
+    return jsonify({'task': test[0]})
+
+#Define DLETE USER
+@app.route('/api/v1/users/<int:test_id>', methods=['DELETE'])
+def delete_task(test_id):
+    test = [test for test in tests if test['id'] == test_id]
+    if len(test) == 0:
+        abort(404)
+    test.remove(test[0])
+    return jsonify({'result': True})
+
 if __name__ == '__main__':
     app.run(debug=True)
