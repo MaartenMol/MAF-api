@@ -1,19 +1,26 @@
 # MAF-api
 
 ## API Design
-### API URIs
+### User API
 | Implemented | HTTP Method | URL | Action |
 | ------------- | ------------- | ------------- | ------------- |
-|User Space|
 | :heavy_check_mark: | GET | http://[hostname]/api/v1/users/ | Retrieve list of users |
 | :heavy_check_mark: | GET | http://[hostname]/api/v1/users/[searchField]/[searchTerm] | Retrieve a user |
 | :heavy_check_mark: | POST | http://[hostname]/api/v1/users/ | Create a user |
 | :heavy_check_mark: | PUT | http://[hostname]/api/v1/users/email/[email] | Update a User |
 | :heavy_check_mark: | DELETE | http://[hostname]/api/v1/users/email/[email] | Delete a user |
+
+### Workout API
+| Implemented | HTTP Method | URL | Action |
+| ------------- | ------------- | ------------- | ------------- |
 |  | GET | http://[hostname]/api/v1/workouts/[workout_id] | Retrieve a workout |
 |  | POST | http://[hostname]/api/v1/workouts/ | Create a workout |
 |  | PUT | http://[hostname]/api/v1/workouts/id/[id] | Update a Workout |
 |  | DELETE | http://[hostname]/api/v1/workouts/id/[id] | Delete a workout |
+
+### Video API
+| Implemented | HTTP Method | URL | Action |
+| ------------- | ------------- | ------------- | ------------- |
 | :heavy_check_mark: | GET | http://[hostname]/api/v1/videos/ | Retrieve list of videos |
 | :heavy_check_mark: | GET | http://[hostname]/api/v1/videos/[searchField]/[searchTerm] | Retrieve a video |
 | :heavy_check_mark: | POST | http://[hostname]/api/v1/videos/ | Create a video |
