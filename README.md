@@ -24,6 +24,7 @@
 * **lastname**: Lastname
 * **email**: E-Mail address unique per user
 * **street**: Street name & house number
+* **city**: City
 * **membership**: Membership status
 
 #### Workouts
