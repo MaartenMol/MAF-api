@@ -6,16 +6,17 @@
 | ------------- | ------------- | ------------- | ------------- |
 | :heavy_check_mark: | GET | http://[hostname]/api/v1/users/ | Retrieve list of users |
 | :heavy_check_mark: | GET | http://[hostname]/api/v1/users/[searchField]/[searchTerm] | Retrieve a user |
-|  | GET | http://[hostname]/api/v1/workouts/[workout_id] | Retrieve a workout |
-| :heavy_check_mark: | GET | http://[hostname]/api/v1/videos/ | Retrieve list of videos |
-| :heavy_check_mark: | GET | http://[hostname]/api/v1/videos/[video_id] | Retrieve a video |
 | :heavy_check_mark: | POST | http://[hostname]/api/v1/users/ | Create a user |
-|  | POST | http://[hostname]/api/v1/workouts/ | Create a workout |
-| :heavy_check_mark: | POST | http://[hostname]/api/v1/videos/ | Create a video |
 | :heavy_check_mark: | PUT | http://[hostname]/api/v1/users/email/[email] | Update a User |
-| :heavy_check_mark: | PUT | http://[hostname]/api/v1/videos/id/[id] | Update a User |
 | :heavy_check_mark: | DELETE | http://[hostname]/api/v1/users/email/[email] | Delete a user |
-|  | DELETE | http://[hostname]/api/v1/workouts/[workout_id] | Delete a workout |
+|  | GET | http://[hostname]/api/v1/workouts/[workout_id] | Retrieve a workout |
+|  | POST | http://[hostname]/api/v1/workouts/ | Create a workout |
+|  | PUT | http://[hostname]/api/v1/workouts/id/[id] | Update a Workout |
+|  | DELETE | http://[hostname]/api/v1/workouts/id/[id] | Delete a workout |
+| :heavy_check_mark: | GET | http://[hostname]/api/v1/videos/ | Retrieve list of videos |
+| :heavy_check_mark: | GET | http://[hostname]/api/v1/videos/[searchField]/[searchTerm] | Retrieve a video |
+| :heavy_check_mark: | POST | http://[hostname]/api/v1/videos/ | Create a video |
+| :heavy_check_mark: | PUT | http://[hostname]/api/v1/videos/id/[id] | Update a Video |
 | :heavy_check_mark: | DELETE | http://[hostname]/api/v1/videos/[video_id] | Delete a video |
 
 ### Fields
@@ -30,6 +31,7 @@
 
 #### Workouts
 * **_id**: Unique number per workout
+* **user_id**: ID of the user that has created the workout
 * **type**: Activity type, eg: fitness walking, crosstrainer, rowing machine, spinning
 * **date**: Date of the activity
 * **start_time**: Start time of the activity
