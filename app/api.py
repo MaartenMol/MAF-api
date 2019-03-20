@@ -3,6 +3,7 @@ from flask import Flask, jsonify, abort, make_response, request
 from pymongo import MongoClient
 from bson.json_util import dumps
 import json
+import uuid
 
 #Setup MongoDB Client
 client = MongoClient('Maarten-NB:27017')
@@ -34,16 +35,36 @@ def get_users():
         users = db.Users.find()
         return dumps(users), 200, {'Content-Type': 'application/json; charset=utf-8'}
     except Exception as e:
-        return dumps({'error' : str(e)})
+        return dumps({'error' : str(e)}), 404, {'Content-Type': 'application/json; charset=utf-8'}
+
+
+#Define GET VIDEOS
+@app.route('/api/v1/videos', methods=['GET'])
+def get_videos():
+    try:
+        videos = db.Videos.find()
+        return dumps(videos), 200, {'Content-Type': 'application/json; charset=utf-8'}
+    except Exception as e:
+        return dumps({'error' : str(e)}), 404, {'Content-Type': 'application/json; charset=utf-8'}
 
 
 
 #Define GET USER
 @app.route('/api/v1/users/<field>/<value>', methods=['GET'])
-def get_test(field, value):
+def get_user(field, value):
     try:
         user = db.Users.find({ field : value })
         return dumps(user), 200, {'Content-Type': 'application/json; charset=utf-8'}
+    except Exception as e:
+        return dumps({'error' : str(e)}), 404, {'Content-Type': 'application/json; charset=utf-8'}
+
+
+#Define GET VIDEO
+@app.route('/api/v1/videos/<field>/<value>', methods=['GET'])
+def get_video(field, value):
+    try:
+        video = db.Videos.find({ field : value })
+        return dumps(video), 200, {'Content-Type': 'application/json; charset=utf-8'}
     except Exception as e:
         return dumps({'error' : str(e)}), 404, {'Content-Type': 'application/json; charset=utf-8'}
 
@@ -60,8 +81,10 @@ def create_user():
         street = data['street']
         city = data['city']
         membership = data['membership']
+        uid = uuid.uuid4().hex
         if db.Users.count_documents({ 'email': email }, limit = 1) == 0:
             status = db.Users.insert_one({
+                "_id" : uid,
                 "firstname" : firstname,
                 "lastname" : lastname,
                 "email" : email,
@@ -77,9 +100,35 @@ def create_user():
 
 
 
+#Define CREATE VIDEO
+@app.route('/api/v1/videos', methods=['POST'])
+def create_video():
+    try:
+        data = json.loads(request.data)
+        title = data['title']
+        desc = data['desc']
+        length = data['length']
+        path = data['path']
+        uid = uuid.uuid4().hex
+        if db.Videos.count_documents({ 'title': title }, limit = 1) == 0:
+            status = db.Videos.insert_one({
+                "_id" : uid,
+                "title" : title,
+                "desc" : desc,
+                "length" : length,
+                "path" : path
+            })
+            return jsonify({"create" : "success"}), 200, {'Content-Type': 'application/json; charset=utf-8'}
+        else:
+            return jsonify({"create" : "titleDuplicateFound"}), 400, {'Content-Type': 'application/json; charset=utf-8'}
+    except Exception as e:
+        return dumps({'error' : str(e)})
+
+
+
 #Define UPDATE USER
 @app.route('/api/v1/users/email/<value>', methods=['PUT'])
-def update_test(value):
+def update_user(value):
     try:
         if db.Users.count_documents({ "email" : value }, limit = 1) == 1:
             data = json.loads(request.data)
@@ -127,10 +176,51 @@ def update_test(value):
         return dumps({'error' : str(e)}), 404, {'Content-Type': 'application/json; charset=utf-8'}
 
 
+#Define UPDATE VIDEO
+@app.route('/api/v1/videos/id/<value>', methods=['PUT'])
+def update_video(value):
+    try:
+        if db.Users.count_documents({ "_id" : value }, limit = 1) == 1:
+            data = json.loads(request.data)
+
+            newValues = {}
+
+            if "title" in data:
+                title = data['title']
+                newValue = { "title": title }
+                newValues.update(newValue)
+
+            if "desc" in data:
+                desc = data['desc']
+                newValue = { "desc": desc }
+                newValues.update(newValue)
+
+            if "length" in data:
+                length = data['length']
+                newValue = { "length": length }
+                newValues.update(newValue)
+
+            if "path" in data:
+                path = data['path']
+                newValue = { "path": path }
+                newValues.update(newValue)
+
+            db.Videos.update_one({ "_id" : value }, { "$set" : newValues })
+            
+            return jsonify({"update" : "success"}), 200, {'Content-Type': 'application/json; charset=utf-8'}
+            
+        else:
+            return jsonify({"update" : "videoNotFound"}), 404, {'Content-Type': 'application/json; charset=utf-8'}
+            
+    except Exception as e:
+        return dumps({'error' : str(e)}), 404, {'Content-Type': 'application/json; charset=utf-8'}
+
+
+
 
 #Define DELETE USER with EMAIL
 @app.route('/api/v1/users/email/<value>', methods=['DELETE'])
-def delete_task(value):
+def delete_user(value):
     try:
         if db.Users.count_documents({ "email" : value }, limit = 1) == 1:
             db.Users.delete_one({ "email" : value })
@@ -140,6 +230,24 @@ def delete_task(value):
             
     except Exception as e:
         return dumps({'error' : str(e)}), 404, {'Content-Type': 'application/json; charset=utf-8'}
+
+
+#Define DELETE VIDEO with ID
+@app.route('/api/v1/videos/id/<value>', methods=['DELETE'])
+def delete_video(value):
+    try:
+        if db.Videos.count_documents({ "_id" : value }, limit = 1) == 1:
+            db.Videos.delete_one({ "_id" : value })
+            return jsonify({"delete" : "success"}), 200, {'Content-Type': 'application/json; charset=utf-8'}
+        else:
+            return jsonify({"delete" : "videoNotFound"}), 404, {'Content-Type': 'application/json; charset=utf-8'}
+            
+    except Exception as e:
+        return dumps({'error' : str(e)}), 404, {'Content-Type': 'application/json; charset=utf-8'}
+
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
