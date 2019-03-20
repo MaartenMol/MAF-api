@@ -4,6 +4,7 @@
 ### API URIs
 | Implemented | HTTP Method | URL | Action |
 | ------------- | ------------- | ------------- | ------------- |
+|User Space|
 | :heavy_check_mark: | GET | http://[hostname]/api/v1/users/ | Retrieve list of users |
 | :heavy_check_mark: | GET | http://[hostname]/api/v1/users/[searchField]/[searchTerm] | Retrieve a user |
 | :heavy_check_mark: | POST | http://[hostname]/api/v1/users/ | Create a user |
