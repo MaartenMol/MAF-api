@@ -42,4 +42,5 @@
 * **_id**: Unique number per video
 * **title**: Title of the video
 * **desc**: Description of the video
+* **length**: length of the video
 * **path**: URL/Path to the video
