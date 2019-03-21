@@ -83,7 +83,7 @@
 
 **Update a user:**
 
-``` curl -i -H "Content-Type: application/json" -X PUT -d '{"name":"Jaapiene", "membership":"disabeld"}' http://127.0.0.1:5000/api/v1/users/email=jbakkers@outlook.com ```
+``` curl -i -H "Content-Type: application/json" -X PUT -d '{"name":"Jaapiene", "membership":"disabeld"}' http://127.0.0.1:5000/api/v1/users/email=jbakkers@hotmail.com ```
 
 **Delete a user:**
 
