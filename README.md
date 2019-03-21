@@ -1,6 +1,7 @@
 # MAF-api
 ## Docker Deploy
 ```docker run --name maf-db -p 27017:27017 -d mongo```
+
 ```docker run --name maf-api -d -e db_ip="maf-db" -p 5000:5000 mennoaltijdfit/api```
 ### Environment Flags
 | Flag | Description |
@@ -86,32 +87,42 @@ Delete a user:
 
 ### Workout Management:
 Retrieve a list of workouts from a user:
+
 ``` curl -i -H "Content-Type: application/json" -X GET http://localhost:5000/api/v1/workouts/email=jbakkers@hotmail.com ```
 
 Retrieve a workout:
+
 ``` curl -i -H "Content-Type: application/json" -X GET http://localhost:5000/api/v1/workouts/[WORKOUT_ID] ```
 
 Create a workout:
+
 ``` curl -i -H "Content-Type: application/json" -X POST -d '{"workout_type":"Walking", "date":"21-03-2019", "start_time":"14:02:21", "end_time":"15:04:23", "calories":"640", "distance":"3100", "comment":"Nice weather"}' http://127.0.0.1:5000/api/v1/workouts/user=jbakkers@hotmail.com ```
 
 Update a Workout:
+
 ``` curl -i -H "Content-Type: application/json" -X PUT -d '{"calories":"6000"}' http://127.0.0.1:5000/api/v1/workouts/id=[WORKOUT_ID] ```
 
 Delete a workout:
+
 ``` curl -i -H "Content-Type: application/json" -X DELETE localhost:5000/api/v1/workouts/id=[WORKOUT_ID] ```
 
 ### Video Management:
 Retrieve list of videos:
+
 ``` curl -i -H "Content-Type: application/json" -X GET http://localhost:5000/api/v1/videos/ ```
 
 Retrieve a video:
+
 ``` curl -i -H "Content-Type: application/json" -X GET http://localhost:5000/api/v1/videos/title=RunningForBeginners ```
 
 Create a video:
+
 ``` curl -i -H "Content-Type: application/json" -X POST -d '{"title":"RunningForBeginners", "desc":"A instruction for beginners", "length":"30", "path":"https://azuredatabucket.mp4"}' http://127.0.0.1:5000/api/v1/videos/ ```
 
 Update a Video:
+
 ``` curl -i -H "Content-Type: application/json" -X PUT -d '{"length":"60"}' http://127.0.0.1:5000/api/v1/videos/id=[VIDEO_ID] ```
 
 Delete a video:
+
 ``` curl -i -H "Content-Type: application/json" -X DELETE localhost:5000/api/v1/videos/id=[VIDEO_ID] ```
