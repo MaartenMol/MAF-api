@@ -63,3 +63,7 @@
 * **desc**: Description of the video
 * **length**: length of the video
 * **path**: URL/Path to the video
+
+## API Examples
+Create a user:
+``` curl -i -H "Content-Type: application/json" -X POST -d '{"firstname":"Jaap", "lastname":"Bakkers", "email":"jbakkers@hotmail.com", "street":"Tolseweg 22", "city":"Berghem", "membership":"premium"}' http://127.0.0.1:5000/api/v1/users ```
