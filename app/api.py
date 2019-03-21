@@ -259,7 +259,7 @@ def update_workout(id):
                 comment = data['comment']
                 newValue = { "comment": comment }
                 newValues.update(newValue)        
-            db.Users.update_one({ "_id" : id }, { "$set" : newValues })
+            db.Workouts.update_one({ "_id" : id }, { "$set" : newValues })
             return jsonify({"updateWorkout" : "success"}), 200, {'Content-Type': 'application/json; charset=utf-8'}
         else:
             return jsonify({"updateWorkout" : "workoutNotFound"}), 404, {'Content-Type': 'application/json; charset=utf-8'}
@@ -270,7 +270,7 @@ def update_workout(id):
 @app.route('/api/v1/videos/id=<value>', methods=['PUT'])
 def update_video(value):
     try:
-        if db.Users.count_documents({ "_id" : value }, limit = 1) == 1:
+        if db.Videos.count_documents({ "_id" : value }, limit = 1) == 1:
             data = json.loads(request.data)
             newValues = {}
             if "title" in data:
