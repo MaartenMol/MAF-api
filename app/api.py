@@ -13,7 +13,7 @@ import os
 #parser.add_argument('--db-port', dest='db_port', default="27017", help='Set Port for MongoDB (default: 27017)')
 #parser.add_argument('--db-name', dest='db_name', default="MAF", help='Set Database Name to use for MongoDB (default: MAF)')
 
-db_ip = os.getenv("db_ip", "localhost")
+db_ip = os.getenv("db_ip", "Maarten-NB")
 db_port = os.getenv("db_port", "27017")
 db_name = os.getenv("db_name", "MAF")
 
@@ -66,6 +66,21 @@ def get_users():
         return dumps({'error' : str(e)}), 404, {'Content-Type': 'application/json; charset=utf-8'}
 
 
+#Define GET WORKOUTS from a USER
+@app.route('/api/v1/workouts/email=<email>', methods=['GET'])
+def get_workouts(email):
+    try:
+        if db.Users.count_documents({ "email" : email }, limit = 1) == 1:
+            workouts = db.Users.find_one({ "email" : email },{"workouts":1})
+            workout = db.Workouts.find({"_id":{"$in":workouts["workouts"]}})
+            return dumps(workout), 200, {'Content-Type': 'application/json; charset=utf-8'}
+
+        else:
+            return jsonify({"getWorkouts" : "userNotFound"}), 404, {'Content-Type': 'application/json; charset=utf-8'}
+    except Exception as e:
+        return dumps({'error' : str(e)}), 404, {'Content-Type': 'application/json; charset=utf-8'}
+
+
 #Define GET VIDEOS
 @app.route('/api/v1/videos', methods=['GET'])
 def get_videos():
@@ -78,7 +93,7 @@ def get_videos():
 
 
 #Define GET USER
-@app.route('/api/v1/users/<field>/<value>', methods=['GET'])
+@app.route('/api/v1/users/<field>=<value>', methods=['GET'])
 def get_user(field, value):
     try:
         user = db.Users.find({ field : value })
@@ -87,8 +102,21 @@ def get_user(field, value):
         return dumps({'error' : str(e)}), 404, {'Content-Type': 'application/json; charset=utf-8'}
 
 
+#Define GET A WORKOUT
+@app.route('/api/v1/workouts/<id>', methods=['GET'])
+def get_workout(id):
+    try:
+        if db.Workouts.count_documents({ "_id" : id }, limit = 1) == 1:
+            workout = db.Workouts.find({ "_id" : id })
+            return dumps(workout), 200, {'Content-Type': 'application/json; charset=utf-8'}
+        else:
+            return jsonify({"getWorkout" : "workoutNotFound"}), 404, {'Content-Type': 'application/json; charset=utf-8'}
+    except Exception as e:
+        return dumps({'error' : str(e)}), 404, {'Content-Type': 'application/json; charset=utf-8'}
+
+
 #Define GET VIDEO
-@app.route('/api/v1/videos/<field>/<value>', methods=['GET'])
+@app.route('/api/v1/videos/<field>=<value>', methods=['GET'])
 def get_video(field, value):
     try:
         video = db.Videos.find({ field : value })
@@ -120,12 +148,48 @@ def create_user():
                 "city" : city,
                 "membership" : membership
             })
-            return dumps({'message' : 'SUCCESS'})
+        
+            return jsonify({"create" : "success"}), 200, {'Content-Type': 'application/json; charset=utf-8'}
         else:
             abort(400)
     except Exception as e:
         return dumps({'error' : str(e)})
 
+
+#Define CREATE WORKOUT
+@app.route('/api/v1/workouts/user=<email>', methods=['POST'])
+def create_workout(email):
+    try:
+        data = json.loads(request.data)
+        workout_type = data['workout_type']
+        date = data['date']
+        start_time = data['start_time']
+        end_time = data['end_time']
+        calories = data['calories']
+        distance = data['distance']
+        comment = data['comment']
+        uid = uuid.uuid4().hex
+        if db.Users.count_documents({ 'email': email }, limit = 1) == 1:
+            status = db.Workouts.insert_one({
+                "_id" : uid,
+                "workout_type" : workout_type,
+                "date" : date,
+                "start_time" : start_time,
+                "end_time" : end_time,
+                "calories" : calories,
+                "distance" : distance,
+                "comment" : comment
+            })
+
+            newValues = { "workouts": uid }
+
+            db.Users.update_one({ "email" : email }, { "$push" : newValues })
+
+            return jsonify({"create" : "success"}), 200, {'Content-Type': 'application/json; charset=utf-8'}
+        else:
+            return jsonify({"create" : "userNotFound"}), 400, {'Content-Type': 'application/json; charset=utf-8'}
+    except Exception as e:
+        return dumps({'error' : str(e)})
 
 
 #Define CREATE VIDEO
@@ -155,7 +219,7 @@ def create_video():
 
 
 #Define UPDATE USER
-@app.route('/api/v1/users/email/<value>', methods=['PUT'])
+@app.route('/api/v1/users/email=<value>', methods=['PUT'])
 def update_user(value):
     try:
         if db.Users.count_documents({ "email" : value }, limit = 1) == 1:
@@ -204,8 +268,64 @@ def update_user(value):
         return dumps({'error' : str(e)}), 404, {'Content-Type': 'application/json; charset=utf-8'}
 
 
+#Define UPDATE WORKOUT
+@app.route('/api/v1/workouts/id=<id>', methods=['PUT'])
+def update_workout(id):
+    try:
+        if db.Workouts.count_documents({ "_id" : id }, limit = 1) == 1:
+            data = json.loads(request.data)
+
+            newValues = {}
+
+            if "type" in data:
+                type = data['type']
+                newValue = { "type": type }
+                newValues.update(newValue)
+
+            if "date" in data:
+                date = data['date']
+                newValue = { "date": date }
+                newValues.update(newValue)
+
+            if "start_time" in data:
+                start_time = data['start_time']
+                newValue = { "start_time": start_time }
+                newValues.update(newValue)
+
+            if "end_time" in data:
+                end_time = data['end_time']
+                newValue = { "end_time": end_time }
+                newValues.update(newValue)
+
+            if "calories" in data:
+                calories = data['calories']
+                newValue = { "calories": calories }
+                newValues.update(newValue)
+
+            if "distance" in data:
+                distance = data['distance']
+                newValue = { "distance": distance }
+                newValues.update(newValue)
+
+            if "comment" in data:
+                comment = data['comment']
+                newValue = { "comment": comment }
+                newValues.update(newValue)        
+
+            db.Users.update_one({ "_id" : id }, { "$set" : newValues })
+            
+            return jsonify({"update" : "success"}), 200, {'Content-Type': 'application/json; charset=utf-8'}
+            
+        else:
+            return jsonify({"update" : "workoutNotFound"}), 404, {'Content-Type': 'application/json; charset=utf-8'}
+            
+    except Exception as e:
+        return dumps({'error' : str(e)}), 404, {'Content-Type': 'application/json; charset=utf-8'}
+
+
+
 #Define UPDATE VIDEO
-@app.route('/api/v1/videos/id/<value>', methods=['PUT'])
+@app.route('/api/v1/videos/id=<value>', methods=['PUT'])
 def update_video(value):
     try:
         if db.Users.count_documents({ "_id" : value }, limit = 1) == 1:
@@ -247,11 +367,16 @@ def update_video(value):
 
 
 #Define DELETE USER with EMAIL
-@app.route('/api/v1/users/email/<value>', methods=['DELETE'])
+@app.route('/api/v1/users/email=<value>', methods=['DELETE'])
 def delete_user(value):
     try:
         if db.Users.count_documents({ "email" : value }, limit = 1) == 1:
+            
+            workouts = db.Users.find_one({ "email" : value },{"workouts":1})
+            db.Workouts.delete_many({"_id":{"$in":workouts["workouts"]}})
+            
             db.Users.delete_one({ "email" : value })
+
             return jsonify({"delete" : "success"}), 200, {'Content-Type': 'application/json; charset=utf-8'}
         else:
             return jsonify({"delete" : "userNotFound"}), 404, {'Content-Type': 'application/json; charset=utf-8'}
@@ -260,8 +385,28 @@ def delete_user(value):
         return dumps({'error' : str(e)}), 404, {'Content-Type': 'application/json; charset=utf-8'}
 
 
+#Define DELETE WORKOUT with ID
+@app.route('/api/v1/workouts/user=<email>/id=<value>', methods=['DELETE'])
+def delete_workout(email, value):
+    try:
+        if db.Workouts.count_documents({ "_id" : value }, limit = 1) == 1:
+            db.Workouts.delete_one({ "_id" : value })
+
+            newValues = { "workouts": value }
+
+            db.Users.update_one({ "email" : email }, { "$pull" : newValues })
+
+            return jsonify({"delete" : "success"}), 200, {'Content-Type': 'application/json; charset=utf-8'}
+        else:
+            return jsonify({"delete" : "videoNotFound"}), 404, {'Content-Type': 'application/json; charset=utf-8'}
+            
+    except Exception as e:
+        return dumps({'error' : str(e)}), 404, {'Content-Type': 'application/json; charset=utf-8'}
+
+
+
 #Define DELETE VIDEO with ID
-@app.route('/api/v1/videos/id/<value>', methods=['DELETE'])
+@app.route('/api/v1/videos/id=<value>', methods=['DELETE'])
 def delete_video(value):
     try:
         if db.Videos.count_documents({ "_id" : value }, limit = 1) == 1:
