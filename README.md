@@ -75,33 +75,33 @@
 
 **Retrieve a user:**
 
-``` curl -i -H "Content-Type: application/json" -X GET http://localhost:5000/api/v1/users/email=jbakkers@hotmail.com ```
+``` curl -i -H "Content-Type: application/json" -X GET http://localhost:5000/api/v1/users/email=jbakkers@outlook.com ```
 
 **Create a user:**
 
-``` curl -i -H "Content-Type: application/json" -X POST -d '{"firstname":"Jaap", "lastname":"Bakkers", "email":"jbakkers@hotmail.com", "street":"Tolseweg 22", "city":"Berghem", "membership":"premium"}' http://127.0.0.1:5000/api/v1/users ```
+``` curl -i -H "Content-Type: application/json" -X POST -d '{"firstname":"Jaap", "lastname":"Bakkers", "email":"jbakkers@outlook.com", "street":"Tolseweg 22", "city":"Berghem", "membership":"premium"}' http://127.0.0.1:5000/api/v1/users ```
 
 **Update a user:**
 
-``` curl -i -H "Content-Type: application/json" -X PUT -d '{"firstname":"Jaapiene", "membership":"disabeld"}' http://127.0.0.1:5000/api/v1/users/email=jbakkers@hotmail.com ```
+``` curl -i -H "Content-Type: application/json" -X PUT -d '{"firstname":"Jaapiene", "membership":"disabeld"}' http://127.0.0.1:5000/api/v1/users/email=jbakkers@outlook.com ```
 
 **Delete a user:**
 
-``` curl -i -H "Content-Type: application/json" -X DELETE localhost:5000/api/v1/users/email=jbakkers@hotmail.com ```
+``` curl -i -H "Content-Type: application/json" -X DELETE localhost:5000/api/v1/users/email=jbakkers@outlook.com ```
 
 
 ### Workout Management:
 **Retrieve a list of workouts from a user:**
 
-``` curl -i -H "Content-Type: application/json" -X GET http://localhost:5000/api/v1/workouts/email=jbakkers@hotmail.com ```
+``` curl -i -H "Content-Type: application/json" -X GET http://localhost:5000/api/v1/workouts/email=jbakkers@outlook.com ```
 
 **Retrieve a workout:**
 
-``` curl -i -H "Content-Type: application/json" -X GET http://localhost:5000/api/v1/workouts/[WORKOUT_ID] ```
+``` curl -i -H "Content-Type: application/json" -X GET http://localhost:5000/api/v1/workouts/_id=[WORKOUT_ID] ```
 
 **Create a workout:**
 
-``` curl -i -H "Content-Type: application/json" -X POST -d '{"workout_type":"Walking", "date":"21-03-2019", "start_time":"14:02:21", "end_time":"15:04:23", "calories":"640", "distance":"3100", "comment":"Nice weather"}' http://127.0.0.1:5000/api/v1/workouts/user=jbakkers@hotmail.com ```
+``` curl -i -H "Content-Type: application/json" -X POST -d '{"workout_type":"Walking", "date":"21-03-2019", "start_time":"14:02:21", "end_time":"15:04:23", "calories":"640", "distance":"3100", "comment":"Nice weather"}' http://127.0.0.1:5000/api/v1/workouts/user=jbakkers@outlook.com ```
 
 **Update a Workout:**
 
@@ -114,7 +114,7 @@
 ### Video Management:
 **Retrieve list of videos:**
 
-``` curl -i -H "Content-Type: application/json" -X GET http://localhost:5000/api/v1/videos/ ```
+``` curl -i -H "Content-Type: application/json" -X GET http://localhost:5000/api/v1/videos ```
 
 **Retrieve a video:**
 
@@ -122,7 +122,7 @@
 
 **Create a video:**
 
-``` curl -i -H "Content-Type: application/json" -X POST -d '{"title":"RunningForBeginners", "desc":"A instruction for beginners", "length":"30", "path":"https://azuredatabucket.mp4"}' http://127.0.0.1:5000/api/v1/videos/ ```
+``` curl -i -H "Content-Type: application/json" -X POST -d '{"title":"RunningForBeginners", "desc":"A instruction for beginners", "length":"30", "path":"https://azuredatabucket.mp4"}' http://127.0.0.1:5000/api/v1/videos ```
 
 **Update a Video:**
 
