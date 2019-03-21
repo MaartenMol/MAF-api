@@ -1,4 +1,12 @@
 # MAF-api
+## Docker Deploy
+```docker run --name maf-api -d -e db_ip="Maarten-NB" -p 5000:5000 mennoaltijdfit/api```
+###Environment Flags
+| Flag | Description |
+| ------------- | ------------- |
+| db_ip | IP or Hostname of the MongoDB server |
+| db_port | Port of the MongoDB server |
+| db_name | Name of the Database to use |
 
 ## API Design
 ### User API
