@@ -8,10 +8,8 @@ COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
 COPY app app
-COPY boot.sh ./
-RUN chmod a+x boot.sh
 
 USER mafApi
 
 EXPOSE 5000
-ENTRYPOINT ["./boot.sh"]
+ENTRYPOINT ["python /app/api.py"]
