@@ -4,10 +4,27 @@ from pymongo import MongoClient
 from bson.json_util import dumps
 import json
 import uuid
+import argparse
+
+#Define startup options and params
+parser = argparse.ArgumentParser(description='API Options')
+parser.add_argument('--db-ip', dest='db_ip', default="localhost", help='Set IP for MongoDB (default: localhost)')
+parser.add_argument('--db-port', dest='db_port', default="27017", help='Set Port for MongoDB (default: 27017)')
+parser.add_argument('--db-name', dest='db_name', default="MAF", help='Set Database Name to use for MongoDB (default: MAF)')
+
+#Print some usefull information to console
+args = parser.parse_args()
+print("Starting API Server")
+print("API Server Version: V0.1")
+print("Developed by: Maarten Mol & Rik Merkens (All rights reserved)")
+print("MongoDB Host: " + args.db_ip)
+print("MongoDB Host: " + args.db_port)
+print("MongoDB DB Name: " + args.db_name)
 
 #Setup MongoDB Client
-client = MongoClient('Maarten-NB:27017')
-db = client.MAF
+client = MongoClient(args.db_ip + ":" + args.db_port)
+dbn = args.db_name
+db = client[dbn]
 
 #Define app with Flask
 app = Flask(__name__)
