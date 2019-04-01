@@ -28,7 +28,7 @@
 | :heavy_check_mark: | GET | http://[hostname]/api/v1/workouts/[searchField]=[searchTerm] | Retrieve a workout |
 | :heavy_check_mark: | POST | http://[hostname]/api/v1/workouts/user=[id] | Create a workout for user |
 | :heavy_check_mark: | PUT | http://[hostname]/api/v1/workouts/id=[id] | Update a Workout |
-| :heavy_check_mark: | DELETE | http://[hostname]/api/v1/workouts/id=[id] | Delete a workout |
+| :heavy_check_mark: | DELETE | http://[hostname]/api/v1/workouts/email=[email]/id=[workoutId] | Delete a workout |
 
 ### Video API
 | Implemented | HTTP Method | URL | Action |
