@@ -2,12 +2,11 @@
 ## Docker Deploy
 ```docker run --name maf-db -p 27017:27017 -d mongo```
 
-```docker run --name maf-api -d -e db_ip="maf-db" -p 5000:5000 mennoaltijdfit/api```
+```docker run --name maf-api -d -e conUri="mongodb:27017" -e db_name="MAF" -p 5000:5000 mennoaltijdfit/api```
 ### Environment Flags
 | Flag | Description |
 | ------------- | ------------- |
-| db_ip | IP or Hostname of the MongoDB server |
-| db_port | Port of the MongoDB server |
+| conUri | URI to the MongoDB Cluster Set or Host ("'mongodb://host1,host2,host3', replicaSet='rs0'" or "mongodb:27017")|
 | db_name | Name of the Database to use |
 
 

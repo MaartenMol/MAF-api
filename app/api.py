@@ -6,20 +6,23 @@ import json
 import uuid
 import os
 
-db_ip = os.getenv("db_ip", "Maarten-NB")
-db_port = os.getenv("db_port", "27017")
+#db_ip = os.getenv("db_ip", "Maarten-NB")
+#db_port = os.getenv("db_port", "27017")
+# Example URI: 'mongodb://host1,host2,host3', replicaSet='rs0'
+conUri = os.getenv("conUri", "maarten-nb:27017")
 db_name = os.getenv("db_name", "MAF")
 
 #Print some usefull information to console
 print("Starting API Server")
 print("API Server Version: V1.0")
 print("Developed by: Maarten Mol & Rik Merkens (All rights reserved)")
-print("MongoDB Host: " + db_ip)
-print("MongoDB Host: " + db_port)
-print("MongoDB DB Name: " + db_name)
+#print("MongoDB Host: " + db_ip)
+#print("MongoDB Host: " + db_port)
+#print("MongoDB DB Name: " + db_name)
 
 #Setup MongoDB Client
-client = MongoClient(db_ip + ":" + db_port)
+#client = MongoClient(db_ip + ":" + db_port)
+client = MongoClient(conUri)
 db = client[db_name]
 
 #Define app with Flask
@@ -320,7 +323,7 @@ def delete_workout(email, value):
             db.Users.update_one({ "email" : email }, { "$pull" : newValues })
             return jsonify({"deleteWorkout" : "success"}), 200, {'Content-Type': 'application/json; charset=utf-8'}
         else:
-            return jsonify({"deleteWorkout" : "videoNotFound"}), 404, {'Content-Type': 'application/json; charset=utf-8'}
+            return jsonify({"deleteWorkout" : "workoutNotFound"}), 404, {'Content-Type': 'application/json; charset=utf-8'}
     except Exception as e:
         return dumps({'error' : str(e)}), 500, {'Content-Type': 'application/json; charset=utf-8'}
 
